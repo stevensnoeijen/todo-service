@@ -27,11 +27,14 @@ _This is required when starting the app for the first time, or when pulling chan
 ## Test
 
 ```bash
-# unit tests
+# unit tests and acceptance tests
 $ npm run test
 
-# e2e tests
-$ npm run test:e2e
+# unit tests
+$ npm run test:unit
+
+# acceptance tests
+$ npm run test:acceptance
 
 # test coverage
 $ npm run test:cov
