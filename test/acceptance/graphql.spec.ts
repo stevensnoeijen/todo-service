@@ -5,7 +5,7 @@ import { INestApplication } from '@nestjs/common';
 
 import { AppModule } from '../../src/app.module';
 
-describe('Graphql (e2e)', () => {
+describe('Graphql', () => {
   let app: INestApplication;
 
   beforeEach(async () => {

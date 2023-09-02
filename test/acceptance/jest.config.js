@@ -7,6 +7,8 @@ const config = {
   transform: {
     "^.+\\.(t|j)s$": "ts-jest"
   },
+  globalSetup: './global/setup.ts',
+  globalTeardown: './global/teardown.ts',
 };
 
 module.exports = config;
