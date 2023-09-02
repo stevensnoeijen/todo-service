@@ -1,0 +1,16 @@
+version: '3.8'
+services:
+  db:
+    image: postgres:15.4-alpine3.18
+    restart: always
+    environment:
+      - POSTGRES_USER=todo-service
+      - POSTGRES_PASSWORD=vUi^#^SwzB9&VumN%wb4pk8xKa
+      - POSTGRES_DB=todo-service
+    ports:
+      - '5432:5432'
+    volumes: 
+      - ./.docker/db:/var/lib/postgresql/data
+volumes:
+  db:
+    driver: local
