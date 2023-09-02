@@ -17,22 +17,24 @@ describe('Graphql', () => {
     await app.init();
   });
 
-  it('POST /graphql', async () => {
-    const { data } = await request<any>(app.getHttpServer())
-      .query(gql`
-        {
-          todos {
-            edges {
-              node {
-                id
-                title
+  describe('query todos', () => {
+    it("should return 0 todo's when table is empty", async () => {
+      const { data } = await request<any>(app.getHttpServer())
+        .query(gql`
+          {
+            todos {
+              edges {
+                node {
+                  id
+                  title
+                }
               }
             }
           }
-        }
-      `)
-      .expectNoErrors();
+        `)
+        .expectNoErrors();
 
-    expect(data.todos.edges).toHaveLength(0);
+      expect(data.todos.edges).toHaveLength(0);
+    });
   });
 });
