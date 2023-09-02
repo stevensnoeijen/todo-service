@@ -1,3 +1,3 @@
 export default async function () {
-  await global.environment.down();
+  await global.db.stop();
 }

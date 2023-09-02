@@ -8,6 +8,5 @@ const datasource = new DataSource({
   migrations: ['./db/migrations/*.ts'],
   logging: true,
 });
-datasource.initialize();
 
 export default datasource;

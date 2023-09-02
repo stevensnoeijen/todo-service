@@ -1,5 +1,5 @@
-import { StartedDockerComposeEnvironment } from 'testcontainers';
+import { StartedTestContainer } from 'testcontainers';
 
 declare global {
-  var environment: StartedDockerComposeEnvironment;
+  var db: StartedTestContainer;
 }
