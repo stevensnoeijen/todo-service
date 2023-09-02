@@ -16,7 +16,11 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "db": "typeorm-ts-node-commonjs -d ./db/datasource.ts",
+    "db:up": "npm run db migration:run",
+    "db:down": "npm run db migration:revert",
+    "db:generate-migration": "npm run db -- migration:generate ./db/migrations/$NAME"
   },
   "dependencies": {
     "@nestjs/apollo": "^12.0.7",

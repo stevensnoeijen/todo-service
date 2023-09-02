@@ -18,7 +18,6 @@ import { TodoModule } from './todo/todo.module';
         type: 'postgres',
         url: configService.get('DB_URL'),
         autoLoadEntities: true,
-        synchronize: true,
         logging: true,
       }),
     }),
