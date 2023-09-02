@@ -5,7 +5,7 @@ services:
     restart: always
     environment:
       - POSTGRES_USER=todo-service
-      - POSTGRES_PASSWORD=vUi^#^SwzB9&VumN%wb4pk8xKa
+      - POSTGRES_PASSWORD=JbeHyqsAAkhZ2S7dNLCRSA9QLzmih8K8SKKUXtS5s6eNyVGf5VaSEoGDp
       - POSTGRES_DB=todo-service
     ports:
       - '5432:5432'
