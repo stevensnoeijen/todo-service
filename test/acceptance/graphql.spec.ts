@@ -173,6 +173,7 @@ describe('Graphql', () => {
             input: {
               todo: {
                 title: 'Nothing',
+                completed: new Date(),
               },
             },
           },
@@ -180,13 +181,13 @@ describe('Graphql', () => {
         .expectNoErrors();
 
       expect(data.createOneTodo).toBeDefined();
-      expect(
-        await todoRepository.exist({
-          where: {
-            id: data.createOneTodo.id,
-          },
-        }),
-      ).toBeTruthy();
+      const createdTodo = await todoRepository.findOne({
+        where: {
+          id: data.createOneTodo.id,
+        },
+      });
+      expect(createdTodo).not.toBeNull();
+      expect(createdTodo.completed).not.toBeNull();
     });
   });
 
