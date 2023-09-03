@@ -1,9 +1,8 @@
 import request from 'supertest-graphql';
 import gql from 'graphql-tag';
-import { Test, TestingModule } from '@nestjs/testing';
+import { Test } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import { DeepPartial, Repository } from 'typeorm';
-import sleep from 'sleep-promise';
 
 import { AppModule } from '../../src/app.module';
 import { TodoEntity } from '../../src/todo/todo.entity';
@@ -120,6 +119,41 @@ describe('Graphql', () => {
         .expectNoErrors();
 
       expect(data.todos.edges).toHaveLength(0);
+    });
+
+    it('should return 1 todo when filtering on completed todo', async () => {
+      await createDbTodo({
+        completed: new Date(),
+      });
+
+      const { data } = await request<any>(app.getHttpServer())
+        .query(
+          gql`
+            query ($filter: TodoFilter!) {
+              todos(filter: $filter) {
+                edges {
+                  node {
+                    id
+                    title
+                    created
+                    updated
+                    completed
+                  }
+                }
+              }
+            }
+          `,
+          {
+            filter: {
+              completed: {
+                isNot: null,
+              },
+            },
+          },
+        )
+        .expectNoErrors();
+
+      expect(data.todos.edges).toHaveLength(1);
     });
   });
 
