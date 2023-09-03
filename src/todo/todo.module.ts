@@ -5,6 +5,7 @@ import { NestjsQueryTypeOrmModule } from '@ptc-org/nestjs-query-typeorm';
 import { TodoEntity } from './todo.entity';
 import { TodoDto } from './todo.dto';
 import { CreateTodoDto } from './create-todo.dto';
+import { UpdateTodoDto } from './update-todo.dto';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { CreateTodoDto } from './create-todo.dto';
           EntityClass: TodoEntity,
           DTOClass: TodoDto,
           CreateDTOClass: CreateTodoDto,
+          UpdateDTOClass: UpdateTodoDto,
         },
       ],
     }),
