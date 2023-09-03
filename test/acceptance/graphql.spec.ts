@@ -264,4 +264,78 @@ describe('Graphql', () => {
       expect(updatedEntity.title).toEqual('updated');
     });
   });
+
+  describe('mutation deleteOneTodo', () => {
+    it('should delete one todo', async () => {
+      const createdEntity = await todoRepository.save(
+        Object.assign(new TodoEntity(), {
+          title: 'created',
+        }),
+      );
+
+      const { data } = await request<any>(app.getHttpServer())
+        .mutate(
+          gql`
+            mutation ($input: DeleteOneTodoInput!) {
+              deleteOneTodo(input: $input) {
+                id
+              }
+            }
+          `,
+          {
+            input: {
+              id: createdEntity.id,
+            },
+          },
+        )
+        .expectNoErrors();
+
+      expect(data.deleteOneTodo.id).toBeNull();
+      const deletedEntity = await todoRepository.findOne({
+        where: {
+          id: createdEntity.id,
+        },
+      });
+      expect(deletedEntity).toBeNull();
+    });
+  });
+
+  describe('mutation deleteManyTodos', () => {
+    it('should delete one todo', async () => {
+      const createdEntity = await todoRepository.save(
+        Object.assign(new TodoEntity(), {
+          title: 'created',
+        }),
+      );
+
+      const { data } = await request<any>(app.getHttpServer())
+        .mutate(
+          gql`
+            mutation ($input: DeleteManyTodosInput!) {
+              deleteManyTodos(input: $input) {
+                deletedCount
+              }
+            }
+          `,
+          {
+            input: {
+              filter: {
+                id: {
+                  eq: createdEntity.id,
+                },
+              },
+            },
+          },
+        )
+        .expectNoErrors();
+
+      expect(data.deleteManyTodos.deletedCount).toEqual(1);
+      const deletedEntity = await todoRepository.findOne({
+        where: {
+          id: createdEntity.id,
+        },
+      });
+      expect(deletedEntity).toBeNull();
+    });
+  });
 });
