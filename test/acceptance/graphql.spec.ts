@@ -2,7 +2,7 @@ import request from 'supertest-graphql';
 import gql from 'graphql-tag';
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
-import { Repository } from 'typeorm';
+import { DeepPartial, Repository } from 'typeorm';
 import sleep from 'sleep-promise';
 
 import { AppModule } from '../../src/app.module';
@@ -12,6 +12,15 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 describe('Graphql', () => {
   let app: INestApplication;
   let todoRepository: Repository<TodoEntity>;
+
+  const createDbTodo = async (props?: DeepPartial<TodoEntity>) => {
+    return todoRepository.save(
+      Object.assign(new TodoEntity(), {
+        title: 'created',
+        ...props,
+      }),
+    );
+  };
 
   beforeAll(async () => {
     const testingModule = await Test.createTestingModule({
@@ -23,11 +32,9 @@ describe('Graphql', () => {
 
     // seeding database
     todoRepository = testingModule.get(getRepositoryToken(TodoEntity));
-    await todoRepository.save(
-      Object.assign(new TodoEntity(), {
-        title: 'Go to work',
-      }),
-    );
+    await createDbTodo({
+      title: 'Go to work',
+    });
   });
 
   afterAll(async () => {
@@ -186,11 +193,7 @@ describe('Graphql', () => {
 
   describe('mutation updateOneTodo', () => {
     it('should update todo', async () => {
-      const createdEntity = await todoRepository.save(
-        Object.assign(new TodoEntity(), {
-          title: 'created',
-        }),
-      );
+      const createdEntity = await createDbTodo();
 
       const { data } = await request<any>(app.getHttpServer())
         .mutate(
@@ -225,11 +228,7 @@ describe('Graphql', () => {
 
   describe('mutation updateManyTodos', () => {
     it('should update todo', async () => {
-      const createdEntity = await todoRepository.save(
-        Object.assign(new TodoEntity(), {
-          title: 'created',
-        }),
-      );
+      const createdEntity = await createDbTodo();
 
       const { data } = await request<any>(app.getHttpServer())
         .mutate(
@@ -267,11 +266,7 @@ describe('Graphql', () => {
 
   describe('mutation deleteOneTodo', () => {
     it('should delete one todo', async () => {
-      const createdEntity = await todoRepository.save(
-        Object.assign(new TodoEntity(), {
-          title: 'created',
-        }),
-      );
+      const createdEntity = await createDbTodo();
 
       const { data } = await request<any>(app.getHttpServer())
         .mutate(
@@ -302,11 +297,7 @@ describe('Graphql', () => {
 
   describe('mutation deleteManyTodos', () => {
     it('should delete one todo', async () => {
-      const createdEntity = await todoRepository.save(
-        Object.assign(new TodoEntity(), {
-          title: 'created',
-        }),
-      );
+      const createdEntity = await createDbTodo();
 
       const { data } = await request<any>(app.getHttpServer())
         .mutate(
