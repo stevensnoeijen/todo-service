@@ -183,4 +183,85 @@ describe('Graphql', () => {
       ).toBeTruthy();
     });
   });
+
+  describe('mutation updateOneTodo', () => {
+    it('should update todo', async () => {
+      const createdEntity = await todoRepository.save(
+        Object.assign(new TodoEntity(), {
+          title: 'created',
+        }),
+      );
+
+      const { data } = await request<any>(app.getHttpServer())
+        .mutate(
+          gql`
+            mutation ($input: UpdateOneTodoInput!) {
+              updateOneTodo(input: $input) {
+                id
+                title
+              }
+            }
+          `,
+          {
+            input: {
+              id: createdEntity.id,
+              update: {
+                title: 'updated',
+              },
+            },
+          },
+        )
+        .expectNoErrors();
+
+      expect(data.updateOneTodo).toBeDefined();
+      const updatedEntity = await todoRepository.findOne({
+        where: {
+          id: data.updateOneTodo.id,
+        },
+      });
+      expect(updatedEntity.title).toEqual('updated');
+    });
+  });
+
+  describe('mutation updateManyTodos', () => {
+    it('should update todo', async () => {
+      const createdEntity = await todoRepository.save(
+        Object.assign(new TodoEntity(), {
+          title: 'created',
+        }),
+      );
+
+      const { data } = await request<any>(app.getHttpServer())
+        .mutate(
+          gql`
+            mutation ($input: UpdateManyTodosInput!) {
+              updateManyTodos(input: $input) {
+                updatedCount
+              }
+            }
+          `,
+          {
+            input: {
+              filter: {
+                id: {
+                  eq: createdEntity.id,
+                },
+              },
+              update: {
+                title: 'updated',
+              },
+            },
+          },
+        )
+        .expectNoErrors();
+
+      expect(data.updateManyTodos.updatedCount).toEqual(1);
+      const updatedEntity = await todoRepository.findOne({
+        where: {
+          id: createdEntity.id,
+        },
+      });
+      expect(updatedEntity.title).toEqual('updated');
+    });
+  });
 });
