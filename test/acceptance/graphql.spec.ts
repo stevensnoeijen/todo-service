@@ -91,7 +91,7 @@ describe('Graphql', () => {
       const { data } = await request<any>(app.getHttpServer())
         .query(
           gql`
-            query todos($filter: TodoFilter!) {
+            query ($filter: TodoFilter!) {
               todos(filter: $filter) {
                 edges {
                   node {
@@ -121,7 +121,7 @@ describe('Graphql', () => {
       const { data } = await request<any>(app.getHttpServer())
         .mutate(
           gql`
-            mutation create($input: CreateOneTodoInput!) {
+            mutation ($input: CreateOneTodoInput!) {
               createOneTodo(input: $input) {
                 id
                 title
@@ -154,7 +154,7 @@ describe('Graphql', () => {
       const { data } = await request<any>(app.getHttpServer())
         .mutate(
           gql`
-            mutation create($input: CreateManyTodosInput!) {
+            mutation ($input: CreateManyTodosInput!) {
               createManyTodos(input: $input) {
                 id
                 title
