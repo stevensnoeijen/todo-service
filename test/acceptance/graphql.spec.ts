@@ -11,6 +11,7 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 
 describe('Graphql', () => {
   let app: INestApplication;
+  let todoRepository: Repository<TodoEntity>;
 
   beforeAll(async () => {
     const testingModule = await Test.createTestingModule({
@@ -21,10 +22,10 @@ describe('Graphql', () => {
     await app.init();
 
     // seeding database
-    const todoRepository = testingModule.get(getRepositoryToken(TodoEntity));
+    todoRepository = testingModule.get(getRepositoryToken(TodoEntity));
     await todoRepository.save(
       Object.assign(new TodoEntity(), {
-        title: 'test',
+        title: 'Go to work',
       }),
     );
   });
@@ -85,33 +86,101 @@ describe('Graphql', () => {
 
       expect(data.todos.edges).toHaveLength(1);
     });
-  });
 
-  it("should return 0 todo's when filtering on non-existing title", async () => {
-    const { data } = await request<any>(app.getHttpServer())
-      .query(
-        gql`
-          query todos($filter: TodoFilter!) {
-            todos(filter: $filter) {
-              edges {
-                node {
-                  id
-                  title
+    it("should return 0 todo's when filtering on non-existing title", async () => {
+      const { data } = await request<any>(app.getHttpServer())
+        .query(
+          gql`
+            query todos($filter: TodoFilter!) {
+              todos(filter: $filter) {
+                edges {
+                  node {
+                    id
+                    title
+                  }
                 }
               }
             }
-          }
-        `,
-        {
-          filter: {
-            title: {
-              eq: 'spongebob',
+          `,
+          {
+            filter: {
+              title: {
+                eq: 'No',
+              },
             },
           },
-        },
-      )
-      .expectNoErrors();
+        )
+        .expectNoErrors();
 
-    expect(data.todos.edges).toHaveLength(0);
+      expect(data.todos.edges).toHaveLength(0);
+    });
+  });
+
+  describe('mutation createOneTodo', () => {
+    it('should create todo', async () => {
+      const { data } = await request<any>(app.getHttpServer())
+        .mutate(
+          gql`
+            mutation create($input: CreateOneTodoInput!) {
+              createOneTodo(input: $input) {
+                id
+                title
+              }
+            }
+          `,
+          {
+            input: {
+              todo: {
+                title: 'Nothing',
+              },
+            },
+          },
+        )
+        .expectNoErrors();
+
+      expect(data.createOneTodo).toBeDefined();
+      expect(
+        await todoRepository.exist({
+          where: {
+            id: data.createOneTodo.id,
+          },
+        }),
+      ).toBeTruthy();
+    });
+  });
+
+  describe('mutation createManyTodos', () => {
+    it('should create todo', async () => {
+      const { data } = await request<any>(app.getHttpServer())
+        .mutate(
+          gql`
+            mutation create($input: CreateManyTodosInput!) {
+              createManyTodos(input: $input) {
+                id
+                title
+              }
+            }
+          `,
+          {
+            input: {
+              todos: [
+                {
+                  title: 'Nothing',
+                },
+              ],
+            },
+          },
+        )
+        .expectNoErrors();
+
+      expect(data.createManyTodos).toHaveLength(1);
+      expect(
+        await todoRepository.exist({
+          where: {
+            id: data.createManyTodos[0].id,
+          },
+        }),
+      ).toBeTruthy();
+    });
   });
 });
