@@ -5,11 +5,11 @@ import { INestApplication } from '@nestjs/common';
 import { DeepPartial, Repository } from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
 
-import { AppModule } from '../../src/app.module';
-import { TodoEntity } from '../../src/todo/todo.entity';
-import { ListEntity } from '../../src/list/list.entity';
+import { AppModule } from '../../../src/app.module';
+import { TodoEntity } from '../../../src/todo/todo.entity';
+import { ListEntity } from '../../../src/list/list.entity';
 
-describe('Graphql', () => {
+describe('Graphql todo', () => {
   let app: INestApplication;
   let listRepository: Repository<ListEntity>;
   let todoRepository: Repository<TodoEntity>;
