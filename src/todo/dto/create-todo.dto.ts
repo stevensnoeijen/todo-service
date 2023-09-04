@@ -18,4 +18,10 @@ export class CreateTodoDto {
   @IsDate()
   @IsOptional()
   completed?: Date | null;
+
+  @Field(() => RelationDto, {
+    nullable: true,
+  })
+  @IsOptional()
+  parent?: RelationDto | null;
 }

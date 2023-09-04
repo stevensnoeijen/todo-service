@@ -4,6 +4,7 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -30,4 +31,11 @@ export class TodoEntity {
   @ManyToOne(() => ListEntity, (list) => list.todos, { nullable: false })
   @JoinColumn({ name: 'list_id' })
   list!: ListEntity;
+
+  @ManyToOne(() => TodoEntity, (parent) => parent.children)
+  @JoinColumn({ name: 'parent_id' })
+  parent: TodoEntity;
+
+  @OneToMany(() => TodoEntity, (child) => child.parent)
+  children: TodoEntity[];
 }
