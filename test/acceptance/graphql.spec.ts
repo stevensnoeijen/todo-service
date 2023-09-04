@@ -3,19 +3,23 @@ import gql from 'graphql-tag';
 import { Test } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import { DeepPartial, Repository } from 'typeorm';
+import { getRepositoryToken } from '@nestjs/typeorm';
 
 import { AppModule } from '../../src/app.module';
 import { TodoEntity } from '../../src/todo/todo.entity';
-import { getRepositoryToken } from '@nestjs/typeorm';
+import { ListEntity } from '../../src/list/list.entity';
 
 describe('Graphql', () => {
   let app: INestApplication;
+  let listRepository: Repository<ListEntity>;
   let todoRepository: Repository<TodoEntity>;
+  let defaultList: ListEntity;
 
   const createDbTodo = async (props?: DeepPartial<TodoEntity>) => {
     return todoRepository.save(
       Object.assign(new TodoEntity(), {
         title: 'created',
+        list: defaultList,
         ...props,
       }),
     );
@@ -30,6 +34,10 @@ describe('Graphql', () => {
     await app.init();
 
     // seeding database
+    listRepository = testingModule.get(getRepositoryToken(ListEntity));
+    defaultList = await listRepository.save({
+      title: 'default',
+    });
     todoRepository = testingModule.get(getRepositoryToken(TodoEntity));
     await createDbTodo({
       title: 'Go to work',
@@ -174,6 +182,7 @@ describe('Graphql', () => {
               todo: {
                 title: 'Nothing',
                 completed: new Date(),
+                list: { id: defaultList.id },
               },
             },
           },
@@ -208,6 +217,7 @@ describe('Graphql', () => {
               todos: [
                 {
                   title: 'Nothing',
+                  list: { id: defaultList.id },
                 },
               ],
             },

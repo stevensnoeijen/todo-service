@@ -7,6 +7,7 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TodoModule } from './todo/todo.module';
+import { ListModule } from './list/list.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { TodoModule } from './todo/todo.module';
       }),
     }),
     TodoModule,
+    ListModule,
   ],
   controllers: [AppController],
   providers: [AppService],

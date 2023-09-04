@@ -2,9 +2,13 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+
+import { ListEntity } from '../list/list.entity';
 
 @Entity('todo')
 export class TodoEntity {
@@ -22,4 +26,8 @@ export class TodoEntity {
 
   @Column({ nullable: true })
   completed!: Date | null;
+
+  @ManyToOne(() => ListEntity, (list) => list.todos, { nullable: false })
+  @JoinColumn({ name: 'list_id' })
+  list!: ListEntity;
 }

@@ -1,17 +1,6 @@
-import { Field, GraphQLISODateTime, InputType } from '@nestjs/graphql';
-import { IsDate, IsOptional, IsString } from 'class-validator';
+import { InputType, PartialType } from '@nestjs/graphql';
+
+import { CreateTodoDto } from './create-todo.dto';
 
 @InputType('UpdateTodo')
-export class UpdateTodoDto {
-  @Field({ nullable: true })
-  @IsOptional()
-  @IsString()
-  title?: string;
-
-  @Field(() => GraphQLISODateTime, {
-    nullable: true,
-  })
-  @IsDate()
-  @IsOptional()
-  completed?: Date | null;
-}
+export class UpdateTodoDto extends PartialType(CreateTodoDto) {}

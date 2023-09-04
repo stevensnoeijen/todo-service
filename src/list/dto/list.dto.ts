@@ -1,15 +1,14 @@
 import {
   FilterableField,
+  FilterableOffsetConnection,
   IDField,
-  Relation,
 } from '@ptc-org/nestjs-query-graphql';
 import { ObjectType, ID, GraphQLISODateTime } from '@nestjs/graphql';
+import { TodoDto } from '../../todo/dto/todo.dto';
 
-import { ListDto } from '../../list/dto/list.dto';
-
-@ObjectType('Todo')
-@Relation('list', () => ListDto)
-export class TodoDto {
+@ObjectType('List')
+@FilterableOffsetConnection('todos', () => TodoDto)
+export class ListDto {
   @IDField(() => ID)
   id!: number;
 
@@ -19,16 +18,6 @@ export class TodoDto {
   @FilterableField(() => GraphQLISODateTime)
   updated!: Date;
 
-  @FilterableField(() => ID, {
-    name: 'list_id',
-  })
-  listId!: number;
-
   @FilterableField()
   title!: string;
-
-  @FilterableField(() => GraphQLISODateTime, {
-    nullable: true,
-  })
-  completed!: Date | null;
 }
