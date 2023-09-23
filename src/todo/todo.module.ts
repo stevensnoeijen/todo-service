@@ -8,7 +8,7 @@ import { UpdateTodoDto } from './dto/update-todo.dto';
 
 import { TodoEntity } from './todo.entity';
 import { AuthModule } from 'src/auth/auth.module';
-import { AuthGuard } from '../auth/auth.quard';
+import { AuthGuard } from '../auth/auth.guard';
 
 @Module({
   imports: [
