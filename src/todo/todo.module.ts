@@ -7,17 +7,20 @@ import { CreateTodoDto } from './dto/create-todo.dto';
 import { UpdateTodoDto } from './dto/update-todo.dto';
 
 import { TodoEntity } from './todo.entity';
+import { AuthModule } from 'src/auth/auth.module';
+import { AuthGuard } from '../auth/auth.quard';
 
 @Module({
   imports: [
     NestjsQueryGraphQLModule.forFeature({
-      imports: [NestjsQueryTypeOrmModule.forFeature([TodoEntity])],
+      imports: [AuthModule, NestjsQueryTypeOrmModule.forFeature([TodoEntity])],
       resolvers: [
         {
           EntityClass: TodoEntity,
           DTOClass: TodoDto,
           CreateDTOClass: CreateTodoDto,
           UpdateDTOClass: UpdateTodoDto,
+          guards: [AuthGuard],
         },
       ],
     }),

@@ -31,6 +31,7 @@ import { UserModule } from './user/user.module';
       useFactory: (configService: ConfigService) => ({
         autoSchemaFile: true,
         playground: configService.get('GRAPHQL_PLAYGROUND') === 'true',
+        fieldResolverEnhancers: ['guards'],
       }),
     }),
     TodoModule,
