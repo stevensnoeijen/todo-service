@@ -25,4 +25,7 @@ export class ListEntity {
 
   @OneToMany(() => TodoEntity, (todo) => todo.list)
   todos: TodoEntity[];
+
+  @Column({ nullable: true, name: 'google_id' })
+  googleId: string | null;
 }

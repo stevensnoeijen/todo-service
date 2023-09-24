@@ -1,12 +1,17 @@
 import { Controller, Get } from '@nestjs/common';
-import { AppService } from './app.service';
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  constructor() {}
 
   @Get()
-  getHello(): string {
-    return this.appService.getHello();
+  index(): string {
+    return `
+    <ul>
+      <li><a href="/graphql">graphql playground</a></li>
+      <li><a href="/integration/google/link">Link google</a></li>
+      <li><a href="/integration/google/tasks?email=">test google tasks</a></li>
+    </ul>
+    `;
   }
 }

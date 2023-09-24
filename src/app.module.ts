@@ -5,11 +5,11 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 
 import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { TodoModule } from './todo/todo.module';
 import { ListModule } from './list/list.module';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
+import { IntegrationModule } from './integration/integration.module';
 
 @Module({
   imports: [
@@ -38,8 +38,8 @@ import { UserModule } from './user/user.module';
     ListModule,
     AuthModule,
     UserModule,
+    IntegrationModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
 })
 export class AppModule {}

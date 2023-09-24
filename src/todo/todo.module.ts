@@ -9,9 +9,13 @@ import { UpdateTodoDto } from './dto/update-todo.dto';
 import { TodoEntity } from './todo.entity';
 import { AuthModule } from 'src/auth/auth.module';
 import { AuthGuard } from '../auth/auth.guard';
+import { TypeOrmModule } from '@nestjs/typeorm';
+
+const typeOrmModule = TypeOrmModule.forFeature([TodoEntity]);
 
 @Module({
   imports: [
+    typeOrmModule,
     NestjsQueryGraphQLModule.forFeature({
       imports: [AuthModule, NestjsQueryTypeOrmModule.forFeature([TodoEntity])],
       resolvers: [
@@ -25,5 +29,6 @@ import { AuthGuard } from '../auth/auth.guard';
       ],
     }),
   ],
+  exports: [typeOrmModule],
 })
 export class TodoModule {}

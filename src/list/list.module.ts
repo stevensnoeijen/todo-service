@@ -9,9 +9,13 @@ import { ListDto } from './dto/list.dto';
 import { CreateListDto } from './dto/create-list.dto';
 import { UpdateListDto } from './dto/update-list.dto';
 import { ListEntity } from './list.entity';
+import { TypeOrmModule } from '@nestjs/typeorm';
+
+const typeOrmModule = TypeOrmModule.forFeature([ListEntity]);
 
 @Module({
   imports: [
+    typeOrmModule,
     NestjsQueryGraphQLModule.forFeature({
       imports: [AuthModule, NestjsQueryTypeOrmModule.forFeature([ListEntity])],
       resolvers: [
@@ -25,5 +29,6 @@ import { ListEntity } from './list.entity';
       ],
     }),
   ],
+  exports: [typeOrmModule],
 })
 export class ListModule {}

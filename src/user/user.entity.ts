@@ -1,4 +1,15 @@
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+
+@Entity('user')
 export class UserEntity {
-  id: number;
-  username: string;
+  @PrimaryGeneratedColumn()
+  id!: number;
+
+  @Column()
+  email!: string;
+
+  @Column({
+    nullable: true,
+  })
+  googleRefreshToken!: string | null;
 }

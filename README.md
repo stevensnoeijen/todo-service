@@ -11,6 +11,10 @@
 $ npm install
 ```
 
+Run `cp .env.example .env` and fill in the empty variables.
+
+Follow https://developers.google.com/identity/openid-connect/openid-connect#appsetup for setting up google's integration, after that enable google's Tasks API and add fill in the env-vars in `.env`.
+
 ## Running the app
 
 ```bash

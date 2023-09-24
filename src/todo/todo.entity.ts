@@ -38,4 +38,7 @@ export class TodoEntity {
 
   @OneToMany(() => TodoEntity, (child) => child.parent)
   children: TodoEntity[];
+
+  @Column({ nullable: true, name: 'google_id' })
+  googleId: string | null;
 }

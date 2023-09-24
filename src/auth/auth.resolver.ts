@@ -8,7 +8,7 @@ export class AuthResolver {
   constructor(private readonly authService: AuthService) {}
 
   @Query(() => LoginEntity)
-  async login(@Args('username', { type: () => String }) username: string) {
-    return this.authService.login(username);
+  async login(@Args('email', { type: () => String }) email: string) {
+    return this.authService.login(email);
   }
 }

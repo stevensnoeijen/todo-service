@@ -4,7 +4,7 @@ import {
   FilterableRelation,
   IDField,
 } from '@ptc-org/nestjs-query-graphql';
-import { ObjectType, ID, GraphQLISODateTime } from '@nestjs/graphql';
+import { ObjectType, ID, GraphQLISODateTime, Field } from '@nestjs/graphql';
 
 import { ListDto } from '../../list/dto/list.dto';
 
@@ -34,4 +34,7 @@ export class TodoDto {
     nullable: true,
   })
   completed!: Date | null;
+
+  @Field()
+  googleId: number | null;
 }

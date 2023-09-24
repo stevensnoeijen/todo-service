@@ -3,7 +3,8 @@ import {
   FilterableOffsetConnection,
   IDField,
 } from '@ptc-org/nestjs-query-graphql';
-import { ObjectType, ID, GraphQLISODateTime } from '@nestjs/graphql';
+import { ObjectType, ID, GraphQLISODateTime, Field } from '@nestjs/graphql';
+
 import { TodoDto } from '../../todo/dto/todo.dto';
 
 @ObjectType('List')
@@ -20,4 +21,7 @@ export class ListDto {
 
   @FilterableField()
   title!: string;
+
+  @Field()
+  googleId: number | null;
 }
