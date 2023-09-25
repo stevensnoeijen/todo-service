@@ -18,10 +18,7 @@ export class GoogleService {
     private todoRepository: Repository<TodoEntity>,
   ) {}
 
-  /**
-   * Sync google list and tasks to local db
-   */
-  async syncTasks(user: UserEntity) {
+  private getTasksClient(user: UserEntity) {
     const auth = new google.auth.OAuth2({
       clientId: this.configService.getOrThrow('GOOGLE_OAUTH_CLIENT_ID'),
       clientSecret: this.configService.getOrThrow('GOOGLE_OAUTH_CLIENT_SECRET'),
@@ -33,16 +30,23 @@ export class GoogleService {
       refresh_token: user.googleRefreshToken,
     });
 
-    const tasks = google.tasks({
+    return google.tasks({
       version: 'v1',
       auth,
     });
+  }
 
-    const listsResult = await tasks.tasklists.list();
+  /**
+   * Sync google list and tasks to local db
+   */
+  async syncTasks(user: UserEntity) {
+    const tasksClient = this.getTasksClient(user);
+
+    const listsResult = await tasksClient.tasklists.list();
 
     const allItems = await Promise.all(
       listsResult.data.items.map(async (list) => {
-        const tasksResult = await tasks.tasks.list({
+        const tasksResult = await tasksClient.tasks.list({
           tasklist: list.id,
           showCompleted: true,
           showDeleted: true,
@@ -59,7 +63,7 @@ export class GoogleService {
       });
 
       if (dbList == null) {
-        dbList = await this.listRepository.create({
+        dbList = this.listRepository.create({
           googleId: list.id!,
         });
       }
@@ -68,13 +72,13 @@ export class GoogleService {
 
       for (const item of items) {
         let dbItem = await this.todoRepository.findOneBy({
-          list: dbList,
-          googleId: list.id!,
+          list: { id: dbList.id },
+          googleId: item.id!,
         });
 
         if (dbItem == null) {
-          dbItem = await this.todoRepository.create({
-            list: dbList,
+          dbItem = this.todoRepository.create({
+            list: { id: dbList.id },
             googleId: item.id!,
           });
         }
