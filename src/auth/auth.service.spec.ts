@@ -17,15 +17,12 @@ describe('AuthService', () => {
   });
 
   describe('login', () => {
-    it('test', () => {
-      expect(1).toBe(1);
-    });
-    // it('should throw error when user doesnt exists', () => {
-    //   userRepository.findOneBy.mockResolvedValue(null);
+    it('should throw error when user doesnt exists', () => {
+      userRepository.findOneBy.mockResolvedValue(null);
 
-    //   expect(() => authService.login('madjack@pirate.com')).rejects.toThrow(
-    //     UnauthorizedException,
-    //   );
-    // });
+      expect(() => authService.login('madjack@pirate.com')).rejects.toThrow(
+        UnauthorizedException,
+      );
+    });
   });
 });
