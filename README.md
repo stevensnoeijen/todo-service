@@ -1,5 +1,7 @@
 # Todo-service
 
+![coverage badge](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wiki/stevensnoeijen/todo-service/coverage-diff-badge.json)
+
 ## Prerequisites
 
 - node (nvm)
